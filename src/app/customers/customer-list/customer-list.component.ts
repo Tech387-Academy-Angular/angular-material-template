@@ -5,48 +5,80 @@ import { NGXLogger } from 'ngx-logger';
 import { Title } from '@angular/platform-browser';
 
 import { NotificationService } from '../../core/services/notification.service';
+import { Customer } from '../customer.model';
+import { FetchingServiceService } from '../customer.service';
 
 export interface PeriodicElement {
   name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+  id: number;
+  username: number;
+  email: string;
+}
+export interface Kustomer {
+  name: string;
+  id: number;
+  username: number;
+  email: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
+const customer: PeriodicElement[] = [
+  // { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
+  // { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
+  // { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
+  // { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
+  // { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
+  // { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
+  // { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
+  // { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
+  // { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
+  // { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
 ];
+
+
 
 @Component({
   selector: 'app-customer-list',
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.css']
 })
+
 export class CustomerListComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+  
+  data : Object;
+  displayedColumns: string[] = ['id', 'name', 'username', 'email'];
+  dataSource = new MatTableDataSource(customer);
+  //dataSource = new MatTableDataSource(this.customers);
+  customers:Customer[];
+
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  //dassadasd
+  
   constructor(
     private logger: NGXLogger,
     private notificationService: NotificationService,
-    private titleService: Title
+    private titleService: Title,private fethService:FetchingServiceService
   ) { }
+  useri:Object[];
 
   ngOnInit() {
     this.titleService.setTitle('angular-material-template - Customers');
     this.logger.log('Customers loaded');
     this.dataSource.sort = this.sort;
-    //dasdasdjasdjasjdlasjdljl
+
+    this.fethService.getData();
+    this.data=this.fethService.getData();
+
+  }
+  // getRecord(nesto:number)
+  // {   
+  //   // console.log(this.fethService.getCustomers());
+  //   // this.customers=this.fethService.getCustomers();
+  //   // this.fethService.getCustomer(nesto);
+  //   // console.log(this.customers);
+  // }
+  GetData()
+  {
+    this.customers=this.fethService.getCustomers();
+
   }
 }
