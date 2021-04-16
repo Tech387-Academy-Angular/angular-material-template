@@ -36,7 +36,7 @@ export class CustomerListComponent implements OnInit {
   dataSource = new MatTableDataSource(ELEMENT_DATA);
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-
+  //dassadasd
   constructor(
     private logger: NGXLogger,
     private notificationService: NotificationService,
@@ -47,6 +47,6 @@ export class CustomerListComponent implements OnInit {
     this.titleService.setTitle('angular-material-template - Customers');
     this.logger.log('Customers loaded');
     this.dataSource.sort = this.sort;
-
+    //dasdasdjasdjasjdlasjdljl
   }
 }
