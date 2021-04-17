@@ -3,38 +3,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NGXLogger } from 'ngx-logger';
 import { Title } from '@angular/platform-browser';
-
 import { NotificationService } from '../../core/services/notification.service';
+import {MatDialog} from '@angular/material/dialog';
+
 import { Customer } from '../customer.model';
 import { FetchingServiceService } from '../customer.service';
-
-export interface PeriodicElement {
-  name: string;
-  id: number;
-  username: number;
-  email: string;
-}
-export interface Kustomer {
-  name: string;
-  id: number;
-  username: number;
-  email: string;
-}
-
-const customer: PeriodicElement[] = [
-  // { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  // { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  // { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  // { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  // { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  // { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  // { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  // { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  // { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  // { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-];
-
-
+import { UserDetailComponent } from 'src/app/shared/user-detail/user-detail.component';
+import { customerDetail } from '../customerDetail.model';
 
 @Component({
   selector: 'app-customer-list',
@@ -43,42 +18,39 @@ const customer: PeriodicElement[] = [
 })
 
 export class CustomerListComponent implements OnInit {
-  
-  data : Object;
+
   displayedColumns: string[] = ['id', 'name', 'username', 'email'];
-  dataSource = new MatTableDataSource(customer);
-  //dataSource = new MatTableDataSource(this.customers);
-  customers:Customer[];
-
-
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  dataSource = new MatTableDataSource<Customer>();
   
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+
   constructor(
     private logger: NGXLogger,
     private notificationService: NotificationService,
-    private titleService: Title,private fethService:FetchingServiceService
-  ) { }
-  useri:Object[];
+    private titleService: Title,private fethService:FetchingServiceService,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit() {
+
+    this.fethService.getData().subscribe(sub=>{
+      this.dataSource.data=sub;
+    });
     this.titleService.setTitle('angular-material-template - Customers');
-    this.logger.log('Customers loaded');
     this.dataSource.sort = this.sort;
-
-    this.fethService.getData();
-    this.data=this.fethService.getData();
+  }
+  getRecord(obj:customerDetail){
+    
+    this.dialog.open(UserDetailComponent,{data:{
+      name:obj.name,
+      address:obj.address,
+      phone:obj.phone,
+      company:obj.company,
+      email:obj.email,
+      username:obj.username,
+      website:obj.website
+    }});
 
   }
-  // getRecord(nesto:number)
-  // {   
-  //   // console.log(this.fethService.getCustomers());
-  //   // this.customers=this.fethService.getCustomers();
-  //   // this.fethService.getCustomer(nesto);
-  //   // console.log(this.customers);
-  // }
-  GetData()
-  {
-    this.customers=this.fethService.getCustomers();
 
-  }
 }

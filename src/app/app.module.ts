@@ -9,6 +9,8 @@ import { CustomMaterialModule } from './custom-material/custom-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { LoggerModule } from 'ngx-logger';
 import { environment } from '../environments/environment';
+import {MatDialogModule} from '@angular/material/dialog';
+import { UserDetailComponent } from './shared/user-detail/user-detail.component';
 
 @NgModule({
   declarations: [
@@ -22,12 +24,14 @@ import { environment } from '../environments/environment';
     CustomMaterialModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    MatDialogModule,
     LoggerModule.forRoot({
       serverLoggingUrl: `http://my-api/logs`,
       level: environment.logLevel,
       serverLogLevel: environment.serverLogLevel
     })
   ],
+  entryComponents:[UserDetailComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
